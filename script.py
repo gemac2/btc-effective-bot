@@ -41,16 +41,6 @@ def search_ticks():
 
     return ticks
 
-def get_klines_five_minute(tick):
-    try:
-        klines = client.futures_klines(symbol=tick, interval=Client.KLINE_INTERVAL_5MINUTE, limit=48)
-        timeframe = "5 Minutes"
-    except Exception as e:
-        print(f"Error while get data for klines  {tick}: {e}")
-        return None
-
-    return klines, timeframe
-
 def get_klines_one_hour(tick):
     try:
         klines = client.futures_klines(symbol=tick, interval=Client.KLINE_INTERVAL_1HOUR, limit=48)
@@ -153,14 +143,6 @@ def main_loop():
         print('Scanning Currencies...')
         print('')
         for tick in ticks:
-            klines_5m, time5m = get_klines_five_minute(tick)
-            if klines_5m is not None:
-                found_signal_bollinger_5m = get_bollinger_signals(tick, klines_5m, time5m)
-                if found_signal_bollinger_5m:
-                    print("Found signal for", tick, "on 5 minute timeframe")
-                    print('**************************************************')
-                    print('')
-
             klines_1h, time1h = get_klines_one_hour(tick)
             if klines_1h is None:
                 continue
